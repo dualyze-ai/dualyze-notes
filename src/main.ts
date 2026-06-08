@@ -5,7 +5,6 @@ import { NoteAnalyzer } from './services/note-analyzer';
 import { SimilarityService } from './services/similarity-service';
 import { ReportGenerator } from './services/report-generator';
 import { MergeDraftGenerator } from './services/merge-draft-generator';
-import { FrontmatterService } from './services/frontmatter-service';
 import { SIMILAR_NOTES_VIEW_TYPE, SimilarNotesView } from './ui/similar-notes-view';
 import { CompareNotesModal } from './ui/compare-notes-modal';
 import { NoteSuggestModal } from './ui/note-suggest-modal';
@@ -28,10 +27,6 @@ export default class DualyzeNotesPlugin extends Plugin {
 
   private get similarityService(): SimilarityService {
     return new SimilarityService(this.settings.weights, this.settings.ngramSize);
-  }
-
-  private get frontmatterService(): FrontmatterService {
-    return new FrontmatterService(this.app);
   }
 
   async onload(): Promise<void> {
@@ -61,17 +56,6 @@ export default class DualyzeNotesPlugin extends Plugin {
         const file = this.app.workspace.getActiveFile();
         if (!file || file.extension !== 'md') return false;
         if (!checking) this.openCompareModal(file);
-        return true;
-      },
-    });
-
-    this.addCommand({
-      id: 'mark-as-merge-candidate',
-      name: 'Mark as merge candidate',
-      checkCallback: (checking) => {
-        const file = this.app.workspace.getActiveFile();
-        if (!file || file.extension !== 'md') return false;
-        if (!checking) void this.markAsMergeCandidate(file);
         return true;
       },
     });
@@ -125,26 +109,8 @@ export default class DualyzeNotesPlugin extends Plugin {
     new CompareNotesModal(
       this.app, fileA, fileB, this.settings,
       this.analyzer, this.similarityService,
-      this.reportGenerator, this.draftGenerator, this.frontmatterService
+      this.reportGenerator, this.draftGenerator,
     ).open();
-  }
-
-  private async markAsMergeCandidate(file: TFile): Promise<void> {
-    const allFiles = this.app.vault.getMarkdownFiles().filter(f => f.path !== file.path);
-    new NoteSuggestModal(this.app, allFiles, async (other) => {
-      try {
-        const [a, b] = await Promise.all([
-          this.analyzer.analyze(file),
-          this.analyzer.analyze(other),
-        ]);
-        const result = this.similarityService.compare(a, b);
-        await this.frontmatterService.markAsMergeCandidate(file, other.basename, result.overallScore);
-        await this.frontmatterService.markAsMergeCandidate(other, file.basename, result.overallScore);
-        new Notice('Both notes marked as merge candidates.');
-      } catch {
-        new Notice('Failed to mark notes.');
-      }
-    }).open();
   }
 
   async loadSettings(): Promise<void> {

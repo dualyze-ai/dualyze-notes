@@ -4,7 +4,6 @@ import { NoteAnalyzer } from '../services/note-analyzer';
 import { SimilarityService } from '../services/similarity-service';
 import { ReportGenerator } from '../services/report-generator';
 import { MergeDraftGenerator } from '../services/merge-draft-generator';
-import { FrontmatterService } from '../services/frontmatter-service';
 
 function scoreColor(score: number): string {
   if (score >= 0.90) return 'var(--color-red)';
@@ -54,7 +53,6 @@ export class CompareNotesModal extends Modal {
   private similarityService: SimilarityService;
   private reportGenerator: ReportGenerator;
   private draftGenerator: MergeDraftGenerator;
-  private frontmatterService: FrontmatterService;
 
   constructor(
     app: App,
@@ -65,7 +63,6 @@ export class CompareNotesModal extends Modal {
     similarityService: SimilarityService,
     reportGenerator: ReportGenerator,
     draftGenerator: MergeDraftGenerator,
-    frontmatterService: FrontmatterService
   ) {
     super(app);
     this.fileA = fileA;
@@ -75,7 +72,6 @@ export class CompareNotesModal extends Modal {
     this.similarityService = similarityService;
     this.reportGenerator = reportGenerator;
     this.draftGenerator = draftGenerator;
-    this.frontmatterService = frontmatterService;
   }
 
   onOpen(): void {
@@ -156,8 +152,6 @@ export class CompareNotesModal extends Modal {
     draftBtn.setAttribute('title', 'Create a new draft note. Original notes will not be modified.');
     draftBtn.addEventListener('click', () => void this.handleDraft(a, b, r));
 
-    const markBtn = actions.createEl('button', { text: 'Mark as candidate' });
-    markBtn.addEventListener('click', () => void this.handleMark(r));
   }
 
   private renderChipSection(container: HTMLElement, label: string, items: string[], cls = 'dualyze-chip'): void {
@@ -184,19 +178,6 @@ export class CompareNotesModal extends Modal {
       new Notice('Draft created. Original notes were not modified.');
     } catch {
       new Notice('Failed to create draft.');
-    }
-  }
-
-  private async handleMark(r: SimilarityResult): Promise<void> {
-    try {
-      const fileA = this.app.vault.getFileByPath(r.sourcePath);
-      const fileB = this.app.vault.getFileByPath(r.targetPath);
-      if (!fileA || !fileB) return;
-      await this.frontmatterService.markAsMergeCandidate(fileA, fileB.basename, r.overallScore);
-      await this.frontmatterService.markAsMergeCandidate(fileB, fileA.basename, r.overallScore);
-      new Notice('Both notes marked as merge candidates.');
-    } catch {
-      new Notice('Failed to mark notes.');
     }
   }
 

@@ -22,7 +22,7 @@ export function createNgrams(text: string, n: number): string[] {
 export function tokenize(text: string, ngramSize: number): string[] {
   const normalized = normalizeText(text);
   const tokens = normalized.split(/[\s\p{P}\p{S}]+/u).filter(t => t.length > 1);
-  const hasEnoughTokens = tokens.length >= 3;
+  const hasEnoughTokens = tokens.length >= 2;
   const hasNonLatin = /[^\p{Script=Latin}\p{Number}\s\p{P}\p{S}]/u.test(normalized);
 
   if (hasEnoughTokens && !hasNonLatin) return tokens;

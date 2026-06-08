@@ -120,3 +120,28 @@ export class Menu {
 }
 
 export const normalizePath = (p: string) => p;
+
+export class WorkspaceLeaf {
+  view: unknown = null;
+  setViewState(_state: unknown): Promise<void> { return Promise.resolve(); }
+}
+
+export class ItemView {
+  app: App;
+  containerEl: HTMLElement;
+  leaf: WorkspaceLeaf;
+
+  constructor(leaf: WorkspaceLeaf) {
+    this.app = new App();
+    this.leaf = leaf;
+    this.containerEl = document.createElement('div');
+    this.containerEl.appendChild(document.createElement('div')); // nav
+    this.containerEl.appendChild(document.createElement('div')); // content
+  }
+
+  getViewType():    string { return ''; }
+  getDisplayText(): string { return ''; }
+  getIcon():        string { return ''; }
+  async onOpen():  Promise<void> {}
+  async onClose(): Promise<void> {}
+}

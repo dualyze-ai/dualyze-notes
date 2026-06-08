@@ -6,7 +6,7 @@ import { SimilarityService } from './services/similarity-service';
 import { ReportGenerator } from './services/report-generator';
 import { MergeDraftGenerator } from './services/merge-draft-generator';
 import { FrontmatterService } from './services/frontmatter-service';
-import { SimilarNotesModal } from './ui/similar-notes-modal';
+import { SIMILAR_NOTES_VIEW_TYPE, SimilarNotesView } from './ui/similar-notes-view';
 import { CompareNotesModal } from './ui/compare-notes-modal';
 import { NoteSuggestModal } from './ui/note-suggest-modal';
 import { DualyzeSettingsTab } from './ui/settings-tab';
@@ -14,20 +14,20 @@ import { DualyzeSettingsTab } from './ui/settings-tab';
 export default class DualyzeNotesPlugin extends Plugin {
   settings!: DualyzeNotesSettings;
 
+  get reportGenerator(): ReportGenerator {
+    return new ReportGenerator(this.app, this.settings.comparisonReportFolder);
+  }
+
+  get draftGenerator(): MergeDraftGenerator {
+    return new MergeDraftGenerator(this.app, this.settings.mergeDraftFolder);
+  }
+
   private get analyzer(): NoteAnalyzer {
     return new NoteAnalyzer(this.app, this.settings);
   }
 
   private get similarityService(): SimilarityService {
     return new SimilarityService(this.settings.weights, this.settings.ngramSize);
-  }
-
-  private get reportGenerator(): ReportGenerator {
-    return new ReportGenerator(this.app, this.settings.comparisonReportFolder);
-  }
-
-  private get draftGenerator(): MergeDraftGenerator {
-    return new MergeDraftGenerator(this.app, this.settings.mergeDraftFolder);
   }
 
   private get frontmatterService(): FrontmatterService {
@@ -38,13 +38,18 @@ export default class DualyzeNotesPlugin extends Plugin {
     await this.loadSettings();
     this.addSettingTab(new DualyzeSettingsTab(this.app, this));
 
+    this.registerView(
+      SIMILAR_NOTES_VIEW_TYPE,
+      (leaf) => new SimilarNotesView(leaf, this)
+    );
+
     this.addCommand({
       id: 'find-similar-notes',
       name: 'Find similar notes',
       checkCallback: (checking) => {
         const file = this.app.workspace.getActiveFile();
         if (!file || file.extension !== 'md') return false;
-        if (!checking) this.openSimilarNotesModal(file);
+        if (!checking) void this.openSimilarNotesView(file);
         return true;
       },
     });
@@ -77,7 +82,7 @@ export default class DualyzeNotesPlugin extends Plugin {
         menu.addItem(item =>
           item.setTitle('Find similar notes')
               .setIcon('search')
-              .onClick(() => this.openSimilarNotesModal(file))
+              .onClick(() => void this.openSimilarNotesView(file))
         );
         menu.addItem(item =>
           item.setTitle('Compare with...')
@@ -88,13 +93,25 @@ export default class DualyzeNotesPlugin extends Plugin {
     );
   }
 
-  openSimilarNotesModal(file: TFile): void {
-    new SimilarNotesModal(
-      this.app, file, this.settings,
-      this.analyzer, this.similarityService,
-      this.reportGenerator, this.draftGenerator, this.frontmatterService,
-      (sourceFile, targetFile) => this.openCompareNotesModal(sourceFile, targetFile)
-    ).open();
+  onunload(): void {
+    this.app.workspace.detachLeavesOfType(SIMILAR_NOTES_VIEW_TYPE);
+  }
+
+  async openSimilarNotesView(file: TFile): Promise<void> {
+    const existing = this.app.workspace.getLeavesOfType(SIMILAR_NOTES_VIEW_TYPE);
+    let leaf = existing[0];
+
+    if (!leaf) {
+      leaf = this.app.workspace.getRightLeaf(false) ?? this.app.workspace.getLeaf(true);
+      await leaf.setViewState({ type: SIMILAR_NOTES_VIEW_TYPE, active: true });
+    }
+
+    this.app.workspace.revealLeaf(leaf);
+
+    const view = leaf.view;
+    if (view instanceof SimilarNotesView) {
+      await view.setSourceFile(file);
+    }
   }
 
   openCompareModal(fileA: TFile): void {

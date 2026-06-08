@@ -1,0 +1,10 @@
+{
+  "id": "dualyze-notes",
+  "name": "Dualyze Notes",
+  "version": "0.1.0",
+  "minAppVersion": "1.4.0",
+  "description": "Find similar notes and create safe merge drafts in Obsidian.",
+  "author": "dualyzeAI",
+  "authorUrl": "https://dualyzeai.com",
+  "isDesktopOnly": false
+}

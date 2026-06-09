@@ -33,12 +33,15 @@ Dualyze Notes uses local similarity scoring. It does not send your notes to an e
 
 ## Installation
 
-Dualyze Notes is not yet listed in the Obsidian community plugin directory. Install it manually:
+### Community plugins (recommended)
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/dualyze-ai/dualyze-notes/releases).
-2. Create the folder `.obsidian/plugins/dualyze-notes/` inside your vault.
-3. Copy the three files into that folder.
-4. In Obsidian, go to **Settings → Community plugins**, disable Safe mode if prompted, and enable **Dualyze Notes**.
+1. Open **Settings → Community plugins → Browse**
+2. Search for **Dualyze Notes**
+3. Install and enable
+
+### Manual
+
+Download `main.js`, `styles.css`, and `manifest.json` from the [latest release](../../releases/latest) and copy them to `.obsidian/plugins/dualyze-notes/` in your vault.
 
 ---
 

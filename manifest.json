@@ -1,7 +1,7 @@
 {
   "id": "dualyze-notes",
   "name": "Dualyze Notes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.7.2",
   "description": "Find similar notes and create safe merge drafts. Compare notes side by side with score breakdown across title, headings, tags, links, and content.",
   "author": "dualyzeAI",

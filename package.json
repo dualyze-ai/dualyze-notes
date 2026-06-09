@@ -1,6 +1,6 @@
 {
   "name": "dualyze-notes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Find similar notes and create safe merge drafts in Obsidian.",
   "main": "main.js",
   "scripts": {

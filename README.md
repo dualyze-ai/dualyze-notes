@@ -1,5 +1,7 @@
 # Dualyze Notes
 
+<img src="https://raw.githubusercontent.com/dualyze-ai/dualyze-notes/main/docs/demo.gif" width="100%">
+
 Find overlapping notes, compare them side by side, and create safe merge drafts in Obsidian.
 
 Obsidian vaults naturally accumulate similar notes: drafts, copied ideas, research fragments, and near-duplicates.

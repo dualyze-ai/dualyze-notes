@@ -1,4 +1,4 @@
-import { Notice, Plugin, TFile } from 'obsidian';
+import { Plugin, TFile } from 'obsidian';
 import { DualyzeNotesSettings } from './types';
 import { DEFAULT_SETTINGS } from './settings';
 import { NoteAnalyzer } from './services/note-analyzer';
@@ -78,7 +78,7 @@ export default class DualyzeNotesPlugin extends Plugin {
   }
 
   onunload(): void {
-    this.app.workspace.detachLeavesOfType(SIMILAR_NOTES_VIEW_TYPE);
+    // leaves are cleaned up automatically by Obsidian
   }
 
   async openSimilarNotesView(file: TFile): Promise<void> {
@@ -90,7 +90,7 @@ export default class DualyzeNotesPlugin extends Plugin {
       await leaf.setViewState({ type: SIMILAR_NOTES_VIEW_TYPE, active: true });
     }
 
-    this.app.workspace.revealLeaf(leaf);
+    void this.app.workspace.revealLeaf(leaf);
 
     const view = leaf.view;
     if (view instanceof SimilarNotesView) {

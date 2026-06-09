@@ -111,17 +111,16 @@ export class DualyzeSettingsTab extends PluginSettingTab {
 
     new Setting(containerEl).setName('Similarity weights').setHeading();
 
-    const warningEl = containerEl.createDiv({ cls: 'dualyze-weights-warning' });
-    warningEl.style.display = 'none';
+    const warningEl = containerEl.createDiv({ cls: 'dualyze-weights-warning dualyze-hidden' });
 
     const checkWeights = () => {
       const w = this.plugin.settings.weights;
       const total = w.title + w.heading + w.tags + w.links + w.content;
       if (Math.abs(total - 1.0) > 0.001) {
         warningEl.setText(`⚠ Weights sum to ${(total * 100).toFixed(0)}% (should be 100%)`);
-        warningEl.style.display = 'block';
+        warningEl.removeClass('dualyze-hidden');
       } else {
-        warningEl.style.display = 'none';
+        warningEl.addClass('dualyze-hidden');
       }
     };
 

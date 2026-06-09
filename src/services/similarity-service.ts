@@ -2,6 +2,23 @@ import { SimilarityWeights, NoteAnalysis, SimilarityResult, SimilarityLabel } fr
 import { jaccardSimilarity, contentSimilarity, intersection, difference } from '../utils/similarity';
 import { normalizeTitle, tokenize } from '../utils/text';
 
+const STOPWORDS = new Set([
+  'the','and','or','in','of','to','at','for','as','is','it','on','an','by',
+  'be','if','no','do','so','up','we','me','my','he','she','they','you','all',
+  'not','but','are','was','has','had','have','from','this','that','its','our',
+  'your','just','into','also','than','then','when','what','more','over','out',
+  'can','will','been','were','with','add','use','set','get','let','put','run',
+  'see','may','per','often','called','same','without','each','only','even',
+  'off','now','how','any','few','new','way','who','its','him','her','too',
+]);
+
+function isKeywordNoise(token: string): boolean {
+  if (STOPWORDS.has(token)) return true;
+  if (/^\d+[a-z]*$/.test(token)) return true;
+  if (token.length <= 2) return true;
+  return false;
+}
+
 export class SimilarityService {
   constructor(private weights: SimilarityWeights, private ngramSize: number) {}
 
@@ -30,8 +47,8 @@ export class SimilarityService {
     const commonTags = intersection(a.tags, b.tags);
     const commonLinks = intersection(a.links, b.links);
 
-    const topTokensA = [...new Set(a.tokens)].slice(0, 50);
-    const topTokensB = [...new Set(b.tokens)].slice(0, 50);
+    const topTokensA = [...new Set(a.tokens)].filter(t => !isKeywordNoise(t)).slice(0, 50);
+    const topTokensB = [...new Set(b.tokens)].filter(t => !isKeywordNoise(t)).slice(0, 50);
     const commonKeywords = intersection(topTokensA, topTokensB).slice(0, 20);
 
     return {

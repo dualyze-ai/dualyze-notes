@@ -9,7 +9,7 @@ function scoreColor(score: number): string {
   if (score >= 0.90) return 'var(--color-red)';
   if (score >= 0.70) return 'var(--color-orange)';
   if (score >= 0.50) return 'var(--color-blue)';
-  return 'var(--background-modifier-border)';
+  return 'var(--text-muted)';
 }
 
 function labelText(label: SimilarityResult['label']): string {
@@ -145,11 +145,11 @@ export class CompareNotesModal extends Modal {
 
     const actions = contentEl.createDiv({ cls: 'dualyze-actions' });
 
-    const reportBtn = actions.createEl('button', { text: 'Create report' });
+    const reportBtn = actions.createEl('button', { text: 'Report' });
     reportBtn.addEventListener('click', () => void this.handleReport(a, b, r));
 
-    const draftBtn = actions.createEl('button', { text: 'Create draft' });
-    draftBtn.setAttribute('title', 'Create a new draft note. Original notes will not be modified.');
+    const draftBtn = actions.createEl('button', { text: 'Create merge draft' });
+    draftBtn.setAttribute('title', 'Create a merge draft. Original notes will not be modified.');
     draftBtn.addEventListener('click', () => void this.handleDraft(a, b, r));
 
   }

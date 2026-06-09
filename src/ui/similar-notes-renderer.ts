@@ -40,18 +40,18 @@ export function renderCards(
     renderBar(accordion, 'Tags',  r.tagScore,  'var(--text-muted)');
     renderBar(accordion, 'Links', r.linkScore, 'var(--text-muted)');
 
-    if (r.commonKeywords.length > 0) {
-      const sec = accordion.createDiv();
-      sec.createEl('small', { text: 'Common keywords' });
-      r.commonKeywords.forEach(kw =>
-        sec.createSpan({ cls: 'dualyze-chip dualyze-chip-common', text: kw })
-      );
-    }
     if (r.commonHeadings.length > 0) {
       const sec = accordion.createDiv();
       sec.createEl('small', { text: 'Common headings' });
       r.commonHeadings.forEach(h =>
         sec.createSpan({ cls: 'dualyze-chip dualyze-chip-common', text: h })
+      );
+    }
+    if (r.commonKeywords.length > 0) {
+      const sec = accordion.createDiv();
+      sec.createEl('small', { text: 'Common keywords' });
+      r.commonKeywords.forEach(kw =>
+        sec.createSpan({ cls: 'dualyze-chip dualyze-chip-common', text: kw })
       );
     }
 
@@ -73,8 +73,8 @@ export function renderCards(
     const reportBtn = actions.createEl('button', { text: 'Report' });
     reportBtn.addEventListener('click', (e) => { e.stopPropagation(); callbacks.onReport(r); });
 
-    const draftBtn = actions.createEl('button', { text: 'Create draft' });
-    draftBtn.setAttribute('title', 'Create a new draft note. Original notes will not be modified.');
+    const draftBtn = actions.createEl('button', { text: 'Create merge draft' });
+    draftBtn.setAttribute('title', 'Create a merge draft. Original notes will not be modified.');
     draftBtn.addEventListener('click', (e) => { e.stopPropagation(); callbacks.onDraft(r); });
   }
 }
@@ -93,7 +93,7 @@ function scoreColor(score: number): string {
   if (score >= 0.90) return 'var(--color-red)';
   if (score >= 0.70) return 'var(--color-orange)';
   if (score >= 0.50) return 'var(--color-blue)';
-  return 'var(--background-modifier-border)';
+  return 'var(--text-muted)';
 }
 
 function labelText(label: SimilarityResult['label']): string {

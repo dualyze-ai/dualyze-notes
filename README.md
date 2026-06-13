@@ -14,12 +14,14 @@ Dualyze Notes uses local similarity scoring. It does not send your notes to an e
 
 ## 📖 Step-by-step Tutorial
 
+See how Alice discovers that two habit notes are 78% similar and safely generates a Merge Draft.
+
 Learn how to:
 
-- Find similar notes
-- Compare notes side by side
-- Understand overlap and unique content
-- Generate a Merge Draft safely
+- Find overlapping notes
+- Compare similarities
+- Preserve originals
+- Create merge drafts
 
 → Read the complete tutorial:
 [How Alice Discovered Her Two Habit Notes Were 78% the Same](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-en-habits.md)

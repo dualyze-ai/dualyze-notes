@@ -12,6 +12,20 @@ Dualyze Notes uses local similarity scoring. It does not send your notes to an e
 
 ---
 
+## 📖 Step-by-step Tutorial
+
+Learn how to:
+
+- Find similar notes
+- Compare notes side by side
+- Understand overlap and unique content
+- Generate a Merge Draft safely
+
+→ Read the complete tutorial:
+[How Alice Discovered Her Two Habit Notes Were 78% the Same](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-en-habits.md)
+
+---
+
 ## When to use Dualyze Notes
 
 - Find duplicate or near-duplicate notes
@@ -206,6 +220,12 @@ Right-click any note in the file explorer or editor tab and choose **Find simila
 **Command palette**
 Open the command palette (`Ctrl/Cmd + P`), search for **Find similar notes**, and run it while a Markdown note is active.
 
+### Example
+
+See a real-world comparison workflow:
+
+- [How Alice Discovered Her Two Habit Notes Were 78% the Same](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-en-habits.md)
+
 ---
 
 ### Similar Notes panel
@@ -335,6 +355,12 @@ For each shared heading, the content is resolved as follows:
 
 **The original notes are not modified.** The draft is a new file; deleting it has no effect on the sources.
 
+### Learn by Example
+
+See how Merge Drafts preserve original notes while combining related knowledge:
+
+- [How Alice Discovered Her Two Habit Notes Were 78% the Same](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-en-habits.md)
+
 ---
 
 ## Settings
@@ -407,6 +433,15 @@ For body content, token overlap is measured using a normalised intersection coun
 Title matching uses character **n-grams** rather than whole words, so partial-word overlaps (useful for CJK text) are captured.
 
 The five dimension scores are combined as a weighted sum to produce the final overall score (0.0–1.0).
+
+---
+
+## Documentation
+
+### Tutorials
+
+- [How Alice Discovered Her Two Habit Notes Were 78% the Same](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-en-habits.md)
+- [Japanese Tutorial (Habit Notes Sample)](https://github.com/dualyze-ai/dualyze-notes/blob/main/docs/tutorials/tutorial-ja-habits.md)
 
 ---
 

@@ -1,10 +1,43 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
+import type { SettingDefinitionItem } from 'obsidian';
 import { DualyzeNotesSettings } from '../types';
 import DualyzeNotesPlugin from '../main';
+import { buildSettingDefinitions, readSetting, weightsMessage, writeSetting } from './settings-definitions';
 
 export class DualyzeSettingsTab extends PluginSettingTab {
+  private weightsWarning: Setting | null = null;
+
   constructor(app: App, private plugin: DualyzeNotesPlugin) {
     super(app, plugin);
+  }
+
+  // Declarative settings for Obsidian 1.13+ (makes settings searchable).
+  // display() below remains as the fallback for older versions.
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return buildSettingDefinitions({
+      isVisible: () => weightsMessage(this.plugin.settings) !== null,
+      render: (setting) => {
+        this.weightsWarning = setting;
+        this.updateWeightsWarning();
+        return () => { this.weightsWarning = null; };
+      },
+    });
+  }
+
+  getControlValue(key: string): unknown {
+    return readSetting(this.plugin.settings, key);
+  }
+
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    if (!writeSetting(this.plugin.settings, key, value)) return;
+    await this.plugin.saveSettings();
+    this.updateWeightsWarning();
+    this.refreshDomState();
+  }
+
+  private updateWeightsWarning(): void {
+    const message = weightsMessage(this.plugin.settings);
+    if (message) this.weightsWarning?.setName(message);
   }
 
   display(): void {

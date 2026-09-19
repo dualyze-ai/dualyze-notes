@@ -24,7 +24,7 @@ function collectControls(items: SettingDefinitionItem[]) {
   return controls;
 }
 
-const hooks = { isVisible: () => false, render: () => undefined };
+const hooks = { render: () => undefined };
 
 describe('buildSettingDefinitions', () => {
   const controls = collectControls(buildSettingDefinitions(hooks));

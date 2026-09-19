@@ -15,7 +15,6 @@ export class DualyzeSettingsTab extends PluginSettingTab {
   // display() below remains as the fallback for older versions.
   getSettingDefinitions(): SettingDefinitionItem[] {
     return buildSettingDefinitions({
-      isVisible: () => weightsMessage(this.plugin.settings) !== null,
       render: (setting) => {
         this.weightsWarning = setting;
         this.updateWeightsWarning();
@@ -32,12 +31,12 @@ export class DualyzeSettingsTab extends PluginSettingTab {
     if (!writeSetting(this.plugin.settings, key, value)) return;
     await this.plugin.saveSettings();
     this.updateWeightsWarning();
-    this.refreshDomState();
   }
 
   private updateWeightsWarning(): void {
     const message = weightsMessage(this.plugin.settings);
-    if (message) this.weightsWarning?.setName(message);
+    this.weightsWarning?.setName(message ?? '');
+    this.weightsWarning?.settingEl.toggleClass('dualyze-hidden', message === null);
   }
 
   display(): void {

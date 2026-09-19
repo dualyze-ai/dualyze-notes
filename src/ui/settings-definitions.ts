@@ -57,7 +57,6 @@ export function writeSetting(settings: DualyzeNotesSettings, key: string, value:
 }
 
 export interface WeightsWarningHooks {
-  isVisible: () => boolean;
   render: (setting: Setting) => void | (() => void);
 }
 
@@ -130,7 +129,7 @@ export function buildSettingDefinitions(hooks: WeightsWarningHooks): SettingDefi
       type: 'group',
       heading: 'Similarity weights',
       items: [
-        { name: 'Weights total', searchable: false, visible: hooks.isVisible, render: hooks.render },
+        { name: 'Weights total', searchable: false, render: hooks.render },
         weightSlider('Title weight', 'title'),
         weightSlider('Heading weight', 'heading'),
         weightSlider('Tags weight', 'tags'),

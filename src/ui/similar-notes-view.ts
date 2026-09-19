@@ -56,7 +56,7 @@ export class SimilarNotesView extends ItemView {
     if (!this.sourceFile) return;
     this.headerEl.empty();
 
-    this.headerEl.createEl('div', {
+    this.headerEl.createDiv({
       cls: 'dualyze-view-source',
       text: this.sourceFile.basename,
     });
